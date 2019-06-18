@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">Blackjack Demo</string>
+  <string name="shuffle_deck">Shuffle deck</string>
+  <string name="deal_hand">New hand</string>
+</resources>
