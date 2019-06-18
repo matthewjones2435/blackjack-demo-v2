@@ -1,13 +1,20 @@
 package edu.cnm.deepdive.blackjackdemo.model;
 
+import com.google.gson.annotations.SerializedName;
+import java.net.URL;
+
 public class Card implements Comparable<Card> {
 
+  @SerializedName("value")
   private final Rank rank;
   private final Suit suit;
+  @SerializedName("image")
+  private final URL imageUrl;
 
-  public Card(Rank rank, Suit suit) {
+  public Card(Rank rank, Suit suit, URL imageUrl) {
     this.rank = rank;
     this.suit = suit;
+    this.imageUrl = imageUrl;
   }
 
   public Rank getRank() {
@@ -16,6 +23,10 @@ public class Card implements Comparable<Card> {
 
   public Suit getSuit() {
     return suit;
+  }
+
+  public URL getImageUrl() {
+    return imageUrl;
   }
 
   @Override
