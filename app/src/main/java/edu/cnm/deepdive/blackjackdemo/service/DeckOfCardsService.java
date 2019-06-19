@@ -17,5 +17,5 @@ public interface DeckOfCardsService {
 
   @GET("deck/{deckId}/shuffle")
   Call<Deck> shuffle(@Path("deckId") String deckId);
-
+  
 }

@@ -1,22 +1,18 @@
 package edu.cnm.deepdive.blackjackdemo.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
+import androidx.recyclerview.widget.RecyclerView.State;
+import com.squareup.picasso.Picasso;
 import edu.cnm.deepdive.blackjackdemo.R;
 import edu.cnm.deepdive.blackjackdemo.model.Card;
 import edu.cnm.deepdive.blackjackdemo.view.HandAdapter.CardHolder;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 public class HandAdapter extends RecyclerView.Adapter<CardHolder> {
@@ -52,30 +48,39 @@ public class HandAdapter extends RecyclerView.Adapter<CardHolder> {
 
     private ImageView itemView;
 
-    public CardHolder(@NonNull View itemView) {
+    private CardHolder(@NonNull View itemView) {
       super(itemView);
       this.itemView = (ImageView) itemView;
     }
 
     private void bind(Card card) {
-      new LoadImageTask().execute(card.getImageUrl());
+      Picasso.get().load(card.getImageUrl().toString()).into(itemView);
     }
 
-    private class LoadImageTask extends AsyncTask<URL, Void, Bitmap> {
+  }
 
-      @Override
-      protected void onPostExecute(Bitmap bitmap) {
-        itemView.setImageBitmap(bitmap);
-      }
+  public static class OverlapDecoration extends RecyclerView.ItemDecoration {
 
-      @Override
-      protected Bitmap doInBackground(URL... urls) {
-        try {
-          return BitmapFactory.decodeStream(urls[0].openConnection().getInputStream());
-        } catch (IOException e) {
-          e.printStackTrace(); // FIXME We need to do something smart here.
-          throw new RuntimeException(e);
-        }
+    private final int verticalOverlap;
+    private final int horizontalOverlap;
+
+    public OverlapDecoration() {
+      this(0, 0);
+    }
+
+    public OverlapDecoration(int horizontalOverlap, int verticalOverlap) {
+      this.horizontalOverlap = horizontalOverlap;
+      this.verticalOverlap = verticalOverlap;
+    }
+
+    @Override
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+        @NonNull RecyclerView parent, @NonNull State state) {
+      final int itemPosition = parent.getChildAdapterPosition(view);
+      if (itemPosition == 0) {
+        super.getItemOffsets(outRect, view, parent, state);
+      } else {
+        outRect.set(horizontalOverlap * itemPosition, verticalOverlap, 0, 0);
       }
     }
 
