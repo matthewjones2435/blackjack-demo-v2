@@ -40,6 +40,7 @@ public class Hand {
     } else if (score == 21 && cards.size() == 2) {
       blackjack = true;
     }
+
   }
 
   public List<Card> getCards() {
